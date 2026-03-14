@@ -55,7 +55,7 @@
         margin-top: 10px;
     }
     #main-ui { display: none; padding: 20px; text-align: center; }
-    #checkout-ui { display: none; padding: 20px; text-align: center; }
+    #checkout-ui { display: none; padding: 20px; text-align: center; position: relative; min-height: 100vh; }
     #scan-ui { display: none; padding: 20px; text-align: center; }
     #display {
         font-size: 48px;
@@ -75,7 +75,7 @@
         max-width: 300px;
         margin: 20px auto;
     }
-    .key, #clear, #cancel, #checkout-cancel, #continue-shopping, #checkout-btn, #scan-complete {
+    .key, #clear, #cancel, #checkout-cancel, #continue-shopping, #checkout-btn, #scan-complete, #add-item, #proceed-checkout {
         padding: 20px;
         font-size: 24px;
         background: #ddd;
@@ -86,10 +86,33 @@
     #clear { background: #ffcc00; }
     #cancel, #checkout-cancel { background: #f00; color: white; margin-top: 20px; }
     #continue-shopping { background: #0f0; color: white; }
-    #checkout-btn, #scan-complete { background: #00f; color: white; }
-    .scanner {
-        font-size: 100px;
-        margin: 40px 0;
+    #checkout-btn, #scan-complete, #proceed-checkout { background: #00f; color: white; }
+    #add-item { background: #ffa500; }
+    #checkout-buttons {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+    }
+    .item-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0;
+    }
+    .item-controls button {
+        padding: 5px 10px;
+        font-size: 20px;
+        background: #ddd;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    .remove-btn {
+        background: #f00;
+        color: white;
     }
     .blink { animation: blinker 1.5s linear infinite; }
     @keyframes blinker { 50% { opacity: 0; } }
@@ -121,17 +144,21 @@
         <button class="key" data-value="9">9</button>
         <button id="clear">Clear</button>
         <button class="key" data-value="0">0</button>
-        <button id="cancel">Cancel</button>
+        <button id="add-item" style="display: none;">Add Item</button>
     </div>
+    <button id="proceed-checkout">Proceed to Checkout</button>
+    <button id="cancel">Cancel</button>
 </div>
 
 <!-- Checkout UI (Hidden Initially) -->
 <div id="checkout-ui">
     <h2>Checkout</h2>
-    <p>Selected Item: <span id="selected-item"></span></p>
-    <button id="checkout-cancel">Cancel</button>
-    <button id="continue-shopping">Continue Shopping</button>
-    <button id="checkout-btn">Checkout</button>
+    <div id="cart-list"></div>
+    <div id="checkout-buttons">
+        <button id="checkout-cancel">Cancel</button>
+        <button id="continue-shopping">Continue Shopping</button>
+        <button id="checkout-btn">Checkout</button>
+    </div>
 </div>
 
 <!-- Scan UI (Hidden Initially) -->
@@ -144,8 +171,10 @@
 
 <script>
     let selectedItem = '';
+    let cart = [];
     const display = document.getElementById('display');
-    const selectedItemSpan = document.getElementById('selected-item');
+    const cartList = document.getElementById('cart-list');
+    const addItemBtn = document.getElementById('add-item');
 
     function startApp() {
         document.getElementById('start-screen').style.display = 'none';
@@ -155,6 +184,52 @@
     function resetSelection() {
         selectedItem = '';
         display.textContent = '0';
+        addItemBtn.style.display = 'none';
+    }
+
+    function updateCartDisplay() {
+        cartList.innerHTML = '';
+        cart.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'item-controls';
+            
+            const span = document.createElement('span');
+            span.textContent = `Item ${index + 1}: ${item.code} (Qty: ${item.qty})`;
+            span.style.fontSize = '32px';
+            span.style.flexGrow = '1';
+            
+            const minusBtn = document.createElement('button');
+            minusBtn.textContent = '-';
+            minusBtn.onclick = () => {
+                if (item.qty > 1) {
+                    item.qty--;
+                } else {
+                    cart.splice(index, 1);
+                }
+                updateCartDisplay();
+            };
+            
+            const plusBtn = document.createElement('button');
+            plusBtn.textContent = '+';
+            plusBtn.onclick = () => {
+                item.qty++;
+                updateCartDisplay();
+            };
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'X';
+            removeBtn.className = 'remove-btn';
+            removeBtn.onclick = () => {
+                cart.splice(index, 1);
+                updateCartDisplay();
+            };
+            
+            div.appendChild(span);
+            div.appendChild(minusBtn);
+            div.appendChild(plusBtn);
+            div.appendChild(removeBtn);
+            cartList.appendChild(div);
+        });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -164,9 +239,7 @@
                     selectedItem += btn.dataset.value;
                     display.textContent = selectedItem;
                     if (selectedItem.length === 3) {
-                        selectedItemSpan.textContent = selectedItem;
-                        document.getElementById('main-ui').style.display = 'none';
-                        document.getElementById('checkout-ui').style.display = 'block';
+                        addItemBtn.style.display = 'inline-block';
                     }
                 }
             });
@@ -176,13 +249,33 @@
             resetSelection();
         });
 
+        document.getElementById('add-item').addEventListener('click', () => {
+            const existing = cart.find(item => item.code === selectedItem);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({code: selectedItem, qty: 1});
+            }
+            resetSelection();
+        });
+
+        document.getElementById('proceed-checkout').addEventListener('click', () => {
+            if (cart.length > 0) {
+                updateCartDisplay();
+                document.getElementById('main-ui').style.display = 'none';
+                document.getElementById('checkout-ui').style.display = 'block';
+            }
+        });
+
         document.getElementById('cancel').addEventListener('click', () => {
+            cart = [];
             resetSelection();
             document.getElementById('main-ui').style.display = 'none';
             document.getElementById('start-screen').style.display = 'flex';
         });
 
         document.getElementById('checkout-cancel').addEventListener('click', () => {
+            cart = [];
             resetSelection();
             document.getElementById('checkout-ui').style.display = 'none';
             document.getElementById('start-screen').style.display = 'flex';
@@ -200,7 +293,9 @@
         });
 
         document.getElementById('scan-complete').addEventListener('click', () => {
-            alert('Checkout completed for item ' + selectedItemSpan.textContent);
+            const items = cart.map(item => `${item.code} (x${item.qty})`).join(', ');
+            alert('Checkout completed for items: ' + items);
+            cart = [];
             resetSelection();
             document.getElementById('scan-ui').style.display = 'none';
             document.getElementById('start-screen').style.display = 'flex';
