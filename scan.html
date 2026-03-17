@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Scanner - Bootstrap 5</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- html5-qrcode library CDN -->
+    <script src="https://unpkg.com"></script>
+    <style>
+        /* Optional custom styling for the scanner area */
+        .scanner-container {
+            max-width: 500px;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #qr-reader {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="scanner-container">
+                    <h4 class="text-center mb-3">Scan Badge Barcode</h4>
+                    <!-- Placeholder for the scanner UI -->
+                    <div id="qr-reader"></div>
+
+                    <h5 class="mt-4">Scanned Result:</h5>
+                    <div id="qr-result" class="alert alert-success mt-2" style="display: none;">
+                        <span id="decoded-text"></span>
+                    </div>
+                    <div id="qr-error" class="alert alert-danger mt-2" style="display: none;">
+                        <span>Error scanning. Please try again or ensure your browser has camera permission.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS CDN (optional, for some Bootstrap features like dropdowns) -->
+    <script src="https://cdn.jsdelivr.net" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Custom JavaScript for scanning -->
+    <script>function onScanSuccess(decodedText, decodedResult) {
+            // Handle the scanned code as you like
+            console.log(`Code matched = ${decodedText}`, decodedResult);
+            document.getElementById('decoded-text').textContent = decodedText;
+            document.getElementById('qr-result').style.display = 'block';
+            document.getElementById('qr-error').style.display = 'none';
+
+            // Stop scanning after a successful scan
+            html5QrcodeScanner.clear();
+        }
+
+        function onScanError(errorMessage) {
+            // Handle scan errors or no QR code detected per frame
+            // console.warn(`Code scan error = ${errorMessage}`); // Use for debugging, can be chatty
+        }
+
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+            "qr-reader",
+            {
+                fps: 10,
+                qrbox: {width: 250, height: 250}, // Define the scanning area
+                rememberLastUsedCamera: true,
+                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA] // Only support camera scanning
+            },
+            /* verbose= */ false
+        );
+
+        // Render the scanner UI
+        html5QrcodeScanner.render(onScanSuccess, onScanError);</script>
+</body>
+</html>

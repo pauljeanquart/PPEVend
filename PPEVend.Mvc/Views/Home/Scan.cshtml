@@ -1,0 +1,35 @@
+﻿@model IList<string>
+@{
+    ViewData["Title"] = "Scan";
+}
+<div class="text-center text-success fixed-top">
+    <div class="d-flex flex-column align-items-center2 justify-content-center vh-100">
+        <div class="text-success">
+            <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5" />
+            </svg>
+        </div>
+        <h1 class="pulse-text m-5">Scan Your Badge To Dispense</h1>
+        <a asp-action="Dispense" asp-controller="Home" class="text-decoration-none">
+            <div class="text-success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" fill="currentColor" class="bi bi-upc-scan" viewBox="0 0 16 16">
+                    <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z" />
+                </svg>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="row ms-1 mb-2 fixed-bottom">
+    <a asp-action="Index" asp-controller="Home" type="button" class="btn btn-danger rounded-3 px-1 fw-bold col-6 fs-1">Cancel Provision</a>
+    <div class="col-3 ms-auto text-light position-relative">
+        <a asp-action="Cart" asp-controller="Home" class="text-decoration-none text-light">
+            <svg class="text-end" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+            </svg>
+            <span id="itemBadge" class="position-absolute top-25 start-50 translate-middle badge rounded-pill bg-danger fs-3">
+                @Model.Count()
+            </span>
+        </a>
+    </div>
+</div>
