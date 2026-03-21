@@ -3,31 +3,46 @@
     ViewData["Title"] = "Cart";
 }
 
-<div class="d-flex flex-column min-vh-100 align-items-bottom">
+<div class="d-flex flex-column align-items-bottom">
     <!-- Fixed Top Section -->
     <div class="parent-container d-flex align-items-center row px-3 " style="height:110px;">
-        <a asp-action="Shop" asp-controller="Home" type="button" class="btn btn-success rounded-3 px-1 fw-bold col-5 p-2 fs-1 h-100 d-flex align-items-center justify-content-center">Keep Shopping</a>
-        <a asp-action="Scan" asp-controller="Home" type="button" class="btn btn-success rounded-3 px-1 fw-bold col-5 p-2 fs-1 h-100 d-flex align-items-center ms-auto justify-content-center">Checkout</a>
+        @if (Model.Count() >= 4)
+        {
+            <span class="px-1 fw-bold col-7 p-2 display-3 h-100 d-flex align-items-center justify-content-center text-light">Cart is full!</span>
+        }
+        else
+        {
+            <a asp-action="Shop" asp-controller="Home" type="button" class="btn btn-success rounded-3 px-1 fw-bold col-5 p-2 fs-1 h-100 d-flex align-items-center justify-content-center">Keep Shopping</a>
+
+        }
+         <a asp-action="Scan" asp-controller="Home" type="button" class="btn btn-success rounded-3 px-1 text-light fw-bold col-5 p-2 fs-1 h-100 d-flex align-items-center ms-auto justify-content-center">Check Out</a>
     </div>
     <!-- Main Content Area -->
     <!-- We add padding to the body to prevent content overlap -->
-    <div class="flex-grow-1 d-flex flex-column-reverse bg-secondary m-2">
-        @foreach(var item in Model)
+    <div class="flex-grow-1 d-flex flex-column-reverse m-2 display-1 fw-bold text-light border-bottom border-2" style="height:500px;">
+        @foreach(var item in Model.Take(4))
         {
-            <div class="p-3 row"><div class="col-10 p-2">@item</div><div class="col-2 text-danger">X</div></div>
+            <div class="m-2 p-3 row border-top border-2">
+                <div class="col-10 p-2">@item</div>
+                <div class="col-2">
+                    <a class="text-danger text-decoration-none" asp-action="Remove" asp-controller="Home" asp-route-id="@item">X</a>
+                </div>
+            </div>
         }
     </div>
 
     <!-- Fixed Bottom Section -->
-    <div class="row ms-1 mb-2 fixed-bottom">
-        <a asp-action="Index" asp-controller="Home" type="button" class="btn btn-danger rounded-3 px-1 fw-bold col-6 fs-1">Cancel Sale</a>
+    <div class="row px-3 ms-1 mb-2 fixed-bottom d-flex align-items-center">
+        <a asp-action="Index" asp-controller="Home" type="button" class="btn btn-danger rounded-3 p-2 fw-bold col-6 fs-1">Cancel Sale</a>
         <div class="col-3 ms-auto text-light position-relative">
-            <svg class="text-end" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
-            </svg>
-            <span id="itemBadge" class="position-absolute top-50 start-50 translate-middle badge rounded-pill bg-danger fs-3">
-                @Model.Count()
-            </span>
+            <a asp-action="Cart" asp-controller="Home" class="text-decoration-none text-light">
+                <svg class="text-end" xmlns="http://www.w3.org/2000/svg" width="96 height="96" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                </svg>
+                <span id="itemBadge" class="position-absolute mt-5 start-50 translate-middle badge rounded-pill bg-danger fs-1">
+                    @Model.Take(4).Count()
+                </span>
+            </a>
         </div>
     </div>
 </div>

@@ -42,6 +42,27 @@ namespace PPEVend.Mvc.Controllers
             return View(shoppingCart);
         }
 
+        public IActionResult Remove(string id)
+        {
+            List<string> sessionCart = HttpContext.Session.GetObject<List<string>>("ShoppingCart");
+            if (sessionCart != null && id != null)
+            {
+                sessionCart.Remove(id);
+            }
+
+            HttpContext.Session.SetObject("ShoppingCart", sessionCart);
+
+            if (sessionCart.Any())
+            {
+                return View("Cart", sessionCart);
+            }
+            else
+            {
+                return View("Shop", sessionCart);
+            }
+            
+        }
+
         public IActionResult Scan()
         {
             List<string> model = HttpContext.Session.GetObject<List<string>>("ShoppingCart") ?? (new List<string>());

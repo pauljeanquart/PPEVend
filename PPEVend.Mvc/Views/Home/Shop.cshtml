@@ -4,8 +4,8 @@
 }
 
 <div class="text-center">
-    <h1 class="pulse-text m-5">Select Item</h1>
-    <div class="d-flex flex-column  justify-content-start vh-100">
+    <h1 class="pulse-text m-4">Select Item</h1>
+    <div class="d-flex flex-column  justify-content-start">
         <div class="row justify-content-center">
             <div class="col-8 col-md-8">
                 <!-- Underline Display Area -->
@@ -31,23 +31,20 @@
                     <div class="col"><button class="btn btn-primary w-100 rounded-3 num-btn shadow-sm border border-light border-2" style="height: 100px; font-size: 3rem;">9</button></div>
 
                     <!-- Row 4 -->
-                    <div class="col d-flex justify-content-center align-items-center pt-2"><a asp-action="Shop" asp-controller="Home" class="btn text-light w-100 rounded-3 fw-bold" style="height: 100px; font-size: 2.4rem;">Clear</a></div>
+                    <div class="col d-flex justify-content-center align-items-center ps-0 pt-3"><a asp-action="Shop" asp-controller="Home" class="text-light w-100 fw-bold text-decoration-none" style="height: 100px; font-size: 2.4rem;">Clear</a></div>
                     <div class="col"><button class="btn btn-primary w-100 rounded-3 num-btn shadow-sm border border-light border-2" style="height: 100px; font-size: 3rem;">0</button></div>
                 </div>
             </div>
-            <div class="row mb-5">&nbsp;</div>
-            <div class="row mb-5">&nbsp;</div>
-            <div class="row mb-5">&nbsp;</div>
 
-            <div class="row ms-1 mb-2 fixed-bottom d-flex align-items-center">
+            <div class="row px-3 ms-1 mb-2 fixed-bottom d-flex align-items-center">
                 <a asp-action="Index" asp-controller="Home" type="button" class="btn btn-danger rounded-3 p-2 fw-bold col-6 fs-1">Cancel Sale</a>
                 <div class="col-3 ms-auto text-light position-relative">
                     <a asp-action="Cart" asp-controller="Home" class="text-decoration-none text-light">
-                        <svg class="text-end" xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                        <svg class="text-end" xmlns="http://www.w3.org/2000/svg" width="96 height="96" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
                             <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
                         </svg>
-                        <span id="itemBadge" class="position-absolute top-25 start-50 translate-middle badge rounded-pill bg-danger fs-3">
-                            @Model.Count()
+                        <span id="itemBadge" class="position-absolute mt-5 start-50 translate-middle badge rounded-pill bg-danger fs-1">
+                            @Model.Take(4).Count()
                         </span>
                     </a>
                 </div>
