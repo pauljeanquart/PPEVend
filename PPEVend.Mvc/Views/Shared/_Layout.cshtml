@@ -10,7 +10,7 @@
 </head>
 <body class=" bg-primary" style="--bs-bg-opacity: .5;">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary fw-bolder border-bottom box-shadow mb-3">
+        <nav class="d-none d-sm-block navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary fw-bolder border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Personal Protective Equipment </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -31,7 +31,7 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="py-3">
             @RenderBody()
         </main>
     </div>
